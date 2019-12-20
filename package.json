@@ -1,0 +1,39 @@
+{
+  "name": "v2land-diamond-hoe",
+  "version": "0.0.1",
+  "description": "News Crawling Service for V2Land",
+  "scripts": {
+    "dev": "webpack --mode=development && node dist/app.js"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.29",
+    "@types/generic-pool": "^3.1.9",
+    "@types/koa": "^2.11.0",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-json": "^2.0.18",
+    "@types/koa-logger": "^3.1.1",
+    "@types/koa-router": "^7.0.42",
+    "@types/node": "^12.12.21",
+    "@types/puppeteer": "^2.0.0",
+    "@types/validator": "^12.0.1",
+    "@typescript-eslint/eslint-plugin": "^2.12.0",
+    "@typescript-eslint/parser": "^2.12.0",
+    "eslint": "^6.7.2",
+    "eslint-config-v2land": "^1.0.4",
+    "eslint-loader": "^3.0.3",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.3",
+    "webpack": "^4.41.4",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {
+    "generic-pool": "^3.7.1",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^7.4.0",
+    "puppeteer": "^2.0.0",
+    "sequelize": "^5.21.3"
+  }
+}

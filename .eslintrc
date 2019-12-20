@@ -1,0 +1,22 @@
+{
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "v2land"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "env": {
+    "node": true
+  },
+  "rules": {
+    "space-before-function-paren": "off",
+    "require-jsdoc": ["error", {
+      "require": {
+          "FunctionDeclaration": false,
+          "MethodDefinition": false,
+          "ClassDeclaration": false,
+          "ArrowFunctionExpression": false,
+          "FunctionExpression": false
+      }
+    }]
+  }
+}

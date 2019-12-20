@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es5",
+    "jsx": "react",
+    "allowJs": true
+  },
+  "include": [
+    "src/*",
+    "app.ts",
+    "node_modules/@types/puppeteer/src/index.d.ts",
+    "node_modules/@types/generic-pool/src/index.d.ts"
+  ]
+}
