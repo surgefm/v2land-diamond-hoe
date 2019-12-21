@@ -10,8 +10,9 @@
   },
   "include": [
     "src/*",
+    "src/**/*",
     "app.ts",
     "node_modules/@types/puppeteer/src/index.d.ts",
-    "node_modules/@types/generic-pool/src/index.d.ts"
+    "node_modules/@types/generic-pool/src/index.d.ts", "src/utils/puppeteerPool.ts"
   ]
 }

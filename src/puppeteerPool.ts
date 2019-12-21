@@ -1,20 +1,31 @@
 import * as puppeteer from 'puppeteer';
 import { Pool, Factory, Options, createPool } from 'generic-pool';
-import { Browser } from 'puppeteer';
+import { Page } from 'puppeteer';
+import { BJNewsComCnCrawler } from './sites/bjnews.com.cn/index';
+import { Crawler } from './types/index';
 
-const puppeteerFactory: Factory<Browser> = {
-  create: async (): Promise<Browser> => {
-    return puppeteer.launch();
-  },
-  destroy: async (browser: Browser): Promise<void> => {
-    await browser.close();
-  },
-};
+export default async function initializePuppeteerPool(): Promise<void> {
+  const browser = await puppeteer.launch();
 
-const options: Options = {
-  max: 5,
-  min: 0,
-};
+  const puppeteerFactory: Factory<Page> = {
+    create: async (): Promise<Page> => {
+      return browser.newPage();
+    },
+    destroy: async (page: Page): Promise<void> => {
+      await page.close;
+    },
+  };
 
-const pool: Pool<Browser> = createPool(puppeteerFactory, options);
-global.puppeteerPool = pool;
+  const options: Options = {
+    max: 5,
+    min: 0,
+  };
+
+  const pool: Pool<Page> = createPool(puppeteerFactory, options);
+  global.puppeteerPool = pool;
+
+  const page = await pool.acquire();
+  const url = new URL('http://www.bjnews.com.cn/news/2019/12/20/664710.html');
+  const crawler: Crawler = new BJNewsComCnCrawler();
+  await crawler.crawlArticle(page, url);
+}

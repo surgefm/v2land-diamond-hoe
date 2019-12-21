@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { Pool } from 'generic-pool';
-import { Browser } from 'puppeteer';
+import { Page } from 'puppeteer';
 
 declare global {
   namespace NodeJS {
     interface Global {
-      puppeteerPool: Pool<Browser>;
+      puppeteerPool: Pool<Page>;
     }
   }
 }

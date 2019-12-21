@@ -4,16 +4,22 @@ import * as Router from 'koa-router';
 import * as logger from 'koa-logger';
 import * as json from 'koa-json';
 
-require('./src/puppeteerPool');
+import initializePuppeteerPool from './src/puppeteerPool';
 
-const app = new Koa();
-const router = new Router();
+async function init(): Promise<void> {
+  await initializePuppeteerPool();
 
-app.use(json());
-app.use(logger());
+  const app = new Koa();
+  const router = new Router();
 
-app.use(router.routes()).use(router.allowedMethods());
+  app.use(json());
+  app.use(logger());
 
-app.listen(3000, () => {
-  console.log('Koa started');
-});
+  app.use(router.routes()).use(router.allowedMethods());
+
+  app.listen(3000, () => {
+    console.log('Koa started');
+  });
+}
+
+init();

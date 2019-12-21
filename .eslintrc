@@ -9,6 +9,7 @@
   },
   "rules": {
     "space-before-function-paren": "off",
+    "prefer-const": "off",
     "require-jsdoc": ["error", {
       "require": {
           "FunctionDeclaration": false,

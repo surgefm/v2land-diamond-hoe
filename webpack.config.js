@@ -21,5 +21,8 @@ module.exports = {
     filename: 'app.js',
     path: path.resolve(__dirname, 'dist'),
   },
+  externals: {
+    puppeteer: 'require("puppeteer")',
+  },
   target: 'node',
 };
