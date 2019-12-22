@@ -1,14 +1,15 @@
-import Site from './Site';
+import { Site } from '../models';
 
-export interface Article {
+interface ArticleObj {
   url: URL;
+  site: Site;
   title?: string;
   content?: string;
   abstract?: string;
   time?: Date;
-  site: Site;
   html?: string;
   screenshot?: string;
+  status?: string;
 }
 
-export default Article;
+export default ArticleObj;

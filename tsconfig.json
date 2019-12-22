@@ -3,16 +3,22 @@
     "outDir": "./dist/",
     "sourceMap": true,
     "noImplicitAny": true,
-    "module": "es6",
-    "target": "es5",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "target": "es6",
     "jsx": "react",
-    "allowJs": true
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": [
     "src/*",
     "src/**/*",
     "app.ts",
     "node_modules/@types/puppeteer/src/index.d.ts",
-    "node_modules/@types/generic-pool/src/index.d.ts", "src/utils/puppeteerPool.ts"
+    "node_modules/@types/generic-pool/src/index.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

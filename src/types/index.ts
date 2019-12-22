@@ -1,5 +1,5 @@
-import Article from './Article';
-import Site from './Site';
+import ArticleObj from './ArticleObj';
+import SiteObj from './SiteObj';
 import Crawler from './Crawler';
 
-export { Article, Site, Crawler };
+export { ArticleObj, SiteObj, Crawler };

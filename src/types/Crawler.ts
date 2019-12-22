@@ -1,12 +1,12 @@
-import Article from './Article';
-import Site from './Site';
+import Article from '../models/Article';
+import SiteObj from './SiteObj';
 import { Page } from 'puppeteer';
 
 export abstract class Crawler {
-  abstract site: Site;
+  abstract site: SiteObj;
 
   abstract crawlArticle(page: Page, url: URL): Promise<Article>;
-  abstract getArticleList(): Promise<URL[]>;
+  abstract getArticleList(page: Page): Promise<URL[]>;
 }
 
 export default Crawler;

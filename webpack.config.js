@@ -16,6 +16,13 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+      'Models': path.resolve(__dirname, 'src/models'),
+      'Sites': path.resolve(__dirname, 'src/sites'),
+      'Utils': path.resolve(__dirname, 'src/utils'),
+      'Types': path.resolve(__dirname, 'src/types'),
+    },
   },
   output: {
     filename: 'app.js',
