@@ -1,7 +1,7 @@
 import { Site } from '../models';
 
 interface ArticleObj {
-  url: URL;
+  url: string;
   site: Site;
   title?: string;
   content?: string;

@@ -11,7 +11,7 @@ export const bjNewsComCn: SiteObj = {
 export class BJNewsComCnCrawler extends Crawler {
   site = bjNewsComCn;
 
-  async crawlArticle(page: Page, url: URL): Promise<Article> {
+  async crawlArticle(page: Page, url: string): Promise<Article> {
     let articleObj: ArticleObj = {
       site: await findOrCreateSite(bjNewsComCn),
       url,
@@ -20,7 +20,7 @@ export class BJNewsComCnCrawler extends Crawler {
     const [article, proceed] = await checkArticle(articleObj);
     if (!proceed) return article;
 
-    await page.goto(url.href, { waitUntil: 'networkidle2' });
+    await page.goto(url, { waitUntil: 'networkidle2' });
 
     article.html = await page.content();
     article.title = await page.$eval('div.title h1', el => el.textContent);
@@ -35,18 +35,13 @@ export class BJNewsComCnCrawler extends Crawler {
     return article.save();
   }
 
-  async getArticleList(page: Page): Promise<URL[]> {
+  async getArticleList(page: Page): Promise<string[]> {
     await page.goto('http://www.bjnews.com.cn/', { waitUntil: 'networkidle2' });
 
-    const links = await page.$$eval(
+    const urls = await page.$$eval(
       'div.news .fl.lnew a',
       els => els.map(el => 'http://www.bjnews.com.cn' + el.getAttribute('href')),
     );
-
-    const urls: URL[] = [];
-    for (const link of links) {
-      urls[urls.length] = new URL(link);
-    }
 
     return urls;
   }

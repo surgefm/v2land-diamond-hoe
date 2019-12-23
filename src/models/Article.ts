@@ -1,10 +1,10 @@
-import SiteModel from './Site';
-import { Table, Column, Model, BelongsTo, Default } from 'sequelize-typescript';
+import Site from './Site';
+import { Table, Column, Model, Default, DataType, ForeignKey } from 'sequelize-typescript';
 
 @Table
 class Article extends Model<Article> {
-  @Column
-  url: URL;
+  @Column(DataType.STRING)
+  url: string;
 
   @Column
   title?: string;
@@ -24,12 +24,13 @@ class Article extends Model<Article> {
   @Column
   screenshot?: string;
 
-  @Column
   @Default('pending')
+  @Column
   status: string;
 
-  @BelongsTo(() => SiteModel)
-  site: SiteModel;
+  @ForeignKey(() => Site)
+  @Column
+  siteId: number
 }
 
 export default Article;

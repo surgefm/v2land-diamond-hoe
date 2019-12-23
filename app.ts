@@ -6,10 +6,12 @@ import * as json from 'koa-json';
 
 import initializePuppeteerPool from './src/puppeteerPool';
 import initializeSequelize from './src/sequelize';
+import initializeCrawlerManager from './src/crawlerManager';
 
 async function init(): Promise<void> {
   await initializePuppeteerPool();
   await initializeSequelize();
+  await initializeCrawlerManager();
 
   const app = new Koa();
   const router = new Router();

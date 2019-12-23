@@ -29,7 +29,11 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   externals: {
-    puppeteer: 'require("puppeteer")',
+    'puppeteer': 'require("puppeteer")',
+    'pg-hstore': 'require("pg-hstore")',
+    'sqlite3': 'require("sqlite3")',
+    'tedious': 'require("tedious")',
+    'pg': 'require("pg")',
   },
   target: 'node',
 };

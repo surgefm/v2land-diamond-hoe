@@ -3,7 +3,7 @@ import { Article } from '../models';
 
 async function checkArticle(article: ArticleObj): Promise<[Article, boolean]> {
   const [a, created] = await Article.findOrCreate({
-    where: { url: article.url.href },
+    where: { url: article.url },
     defaults: {
       status: 'ongoing',
       site: article.site,

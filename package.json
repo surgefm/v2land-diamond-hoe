@@ -33,6 +33,7 @@
     "koa-json": "^2.0.2",
     "koa-logger": "^3.2.1",
     "koa-router": "^7.4.0",
+    "pg": "^7.15.1",
     "puppeteer": "^2.0.0",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^5.21.3",

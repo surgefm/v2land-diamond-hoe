@@ -1,5 +1,6 @@
-import { Table, Column, Model, HasMany } from 'sequelize-typescript';
+import { Table, Column, Model, HasMany, DataType } from 'sequelize-typescript';
 import Article from './Article';
+
 
 @Table({
   tableName: 'site',
@@ -8,7 +9,7 @@ class Site extends Model<Site> {
   @Column
   name: string;
 
-  @Column
+  @Column(DataType.ARRAY(DataType.STRING))
   domains: string[];
 
   @HasMany(() => Article)
