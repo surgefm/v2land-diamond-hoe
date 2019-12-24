@@ -1,13 +1,14 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { Crawler } from './types';
-import { crawlerConfig } from './config';
+import { Article } from './models';
+import { crawlerConfig } from '../config';
 import { mkdir, takeScreenShot, cleanPageStyle } from './utils';
 
-export async function crawlPage(crawler: Crawler, url: string): Promise<void> {
+export async function crawlPage(crawler: Crawler, url: string): Promise<Article> {
   const urlPage = await global.puppeteerPool.acquire();
   await urlPage.setViewport({ width: 1024, height: 768 });
-  await crawler.crawlArticle(urlPage, url);
+  const article = await crawler.crawlArticle(urlPage, url);
 
   if (crawlerConfig.takeScreenshot) {
     await mkdir(path.join(__dirname, '../snapshots'));
@@ -18,14 +19,15 @@ export async function crawlPage(crawler: Crawler, url: string): Promise<void> {
   }
 
   await global.puppeteerPool.destroy(urlPage);
+  return article;
 }
 
-export async function getCrawlingTask(crawler: Crawler): Promise<void> {
+export async function getCrawlingTask(crawler: Crawler): Promise<Article[]> {
   const page = await global.puppeteerPool.acquire();
   const urlList = await crawler.getArticleList(page);
   await global.puppeteerPool.destroy(page);
 
-  await Promise.all(urlList.map((url: string) => crawlPage(crawler, url)));
+  return Promise.all(urlList.map((url: string) => crawlPage(crawler, url)));
 }
 
 export async function crawlAll(): Promise<void> {
@@ -38,7 +40,7 @@ export async function crawlAll(): Promise<void> {
   setTimeout(crawlAll, 15 * 60 * 1000);
 }
 
-export async function initializeCrawlerManager(): Promise<void> {
+export async function initializeCrawlerManager(crawl = true): Promise<void> {
   const crawlers: Crawler[] = [];
 
   const sites = fs.readdirSync(path.join(__dirname, 'sites'));
@@ -57,7 +59,10 @@ export async function initializeCrawlerManager(): Promise<void> {
   }
 
   global.crawlers = crawlers;
-  crawlAll();
+
+  if (crawl) {
+    crawlAll();
+  }
 }
 
 export default initializeCrawlerManager;

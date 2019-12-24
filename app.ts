@@ -8,6 +8,8 @@ import initializePuppeteerPool from './src/puppeteerPool';
 import initializeSequelize from './src/sequelize';
 import initializeCrawlerManager from './src/crawlerManager';
 
+import 'source-map-support/register';
+
 async function init(): Promise<void> {
   await initializePuppeteerPool();
   await initializeSequelize();

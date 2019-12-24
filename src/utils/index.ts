@@ -2,6 +2,7 @@ import takeScreenShot from './takeScreenShot';
 import findOrCreateSite from './findOrCreateSite';
 import checkArticle from './checkArticle';
 import cleanPageStyle from './cleanPageStyle';
+import getCrawler from './getCrawler';
 
 import mkdir from './mkdir';
 
@@ -10,5 +11,7 @@ export {
   findOrCreateSite,
   checkArticle,
   cleanPageStyle,
+  getCrawler,
+
   mkdir,
 };

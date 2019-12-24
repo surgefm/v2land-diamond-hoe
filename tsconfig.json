@@ -13,8 +13,11 @@
   },
   "include": [
     "src/*",
+    "src/*/*",
     "src/**/*",
     "app.ts",
+    "dev.ts",
+    "config.ts",
     "node_modules/@types/puppeteer/src/index.d.ts",
     "node_modules/@types/generic-pool/src/index.d.ts"
   ],

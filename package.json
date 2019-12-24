@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "News Crawling Service for V2Land",
   "scripts": {
-    "dev": "webpack --mode=development && node dist/app.js"
+    "start": "node node_modules/gulp-cli/bin/gulp.js scripts && node dist/app.js",
+    "dev": "node node_modules/gulp-cli/bin/gulp.js scripts && node dist/dev.js"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.29",
@@ -21,10 +22,13 @@
     "eslint": "^6.7.2",
     "eslint-config-v2land": "^1.0.4",
     "eslint-loader": "^3.0.3",
+    "gulp": "4",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "merge2": "^1.3.0",
+    "source-map-support": "^0.5.16",
     "ts-loader": "^6.2.1",
-    "typescript": "^3.7.3",
-    "webpack": "^4.41.4",
-    "webpack-cli": "^3.3.10"
+    "typescript": "^3.7.3"
   },
   "dependencies": {
     "generic-pool": "^3.7.1",

@@ -7,6 +7,7 @@
   "env": {
     "node": true
   },
+  "ignorePatterns": ["dist/"],
   "rules": {
     "space-before-function-paren": "off",
     "prefer-const": "off",

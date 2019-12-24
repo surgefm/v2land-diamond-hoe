@@ -1,7 +1,7 @@
 import * as puppeteer from 'puppeteer';
 import { Pool, Factory, Options, createPool } from 'generic-pool';
 import { Page } from 'puppeteer';
-import { puppeteerConfig } from './config';
+import { puppeteerConfig } from '../config';
 
 export default async function initializePuppeteerPool(): Promise<void> {
   const browser = await puppeteer.launch({
