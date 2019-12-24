@@ -114,15 +114,16 @@ export const peopleComCn: SiteObj = {
     'travel.people.com.cn',
     'country.people.com.cn',
     'ip.people.com.cn',
+    'japan.people.com.cn',
   ],
 };
 
 export class PeopleComCnCrawler extends Crawler {
   site = peopleComCn;
 
-  async crawlArticle(page: Page, url: string): Promise<Article> {
+  async crawlArticle(page: Page, url: string): Promise<[Article, boolean]> {
     const [article, proceed] = await checkArticleWithURL(peopleComCn, url);
-    if (!proceed) return article;
+    if (!proceed) return [article, false];
 
     try {
       await page.goto(url, { waitUntil: 'networkidle2' });
@@ -138,10 +139,10 @@ export class PeopleComCnCrawler extends Crawler {
       article.time = new Date(timeStr.replace('年', '-').replace('月', '-').replace('日', ' ') + ' GMT+8');
       article.source = await safe(page.$eval('meta[name=source]', el => el.getAttribute('content').slice(3)));
 
-      return article.save();
+      return [await article.save(), true];
     } catch (err) {
       article.status = 'pending';
-      await article.save();
+      return [await article.save(), false];
     }
   }
 

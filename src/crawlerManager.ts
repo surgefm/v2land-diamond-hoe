@@ -8,9 +8,9 @@ import { takeScreenShot, cleanPageStyle } from './utils';
 export async function crawlPage(crawler: Crawler, url: string): Promise<Article> {
   const urlPage = await global.puppeteerPool.acquire();
   await urlPage.setViewport({ width: 1024, height: 768 });
-  const article = await crawler.crawlArticle(urlPage, url);
+  const [article, crawledSuccessfully] = await crawler.crawlArticle(urlPage, url);
 
-  if (article !== null) {
+  if (article !== null && crawledSuccessfully) {
     if (crawlerConfig.takeScreenshot) {
       const filename = `${encodeURIComponent(url)}_${Math.floor(Date.now() / 60000)}`;
       await takeScreenShot(urlPage, filename);

@@ -11,9 +11,9 @@ export const bjNewsComCn: SiteObj = {
 export class BJNewsComCnCrawler extends Crawler {
   site = bjNewsComCn;
 
-  async crawlArticle(page: Page, url: string): Promise<Article> {
+  async crawlArticle(page: Page, url: string): Promise<[Article, boolean]> {
     const [article, proceed] = await checkArticleWithURL(bjNewsComCn, url);
-    if (!proceed) return article;
+    if (!proceed) return [article, false];
 
     try {
       await page.goto(url, { waitUntil: 'networkidle2' });
@@ -28,10 +28,10 @@ export class BJNewsComCnCrawler extends Crawler {
       const timeStr = await page.$eval('div.m_ntit span.date', el => el.textContent);
       article.time = new Date(timeStr + ' GMT+8');
 
-      return article.save();
+      return [await article.save(), true];
     } catch (err) {
       article.status = 'pending';
-      await article.save();
+      return [await article.save(), false];
     }
   }
 

@@ -5,7 +5,8 @@ import { Page } from 'puppeteer';
 export abstract class Crawler {
   abstract site: SiteObj;
 
-  abstract crawlArticle(page: Page, url: string): Promise<Article>;
+  // return [article, crawledSuccessfully]
+  abstract crawlArticle(page: Page, url: string): Promise<[Article, boolean]>;
   abstract getArticleList(page: Page): Promise<string[]>;
 }
 
