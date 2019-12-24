@@ -3,7 +3,7 @@ import Article from './Article';
 
 
 @Table({
-  tableName: 'site',
+  tableName: 'sites',
 })
 class Site extends Model<Site> {
   @Column

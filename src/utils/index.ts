@@ -5,6 +5,7 @@ import cleanPageStyle from './cleanPageStyle';
 import getCrawler from './getCrawler';
 
 import mkdir from './mkdir';
+import safe from './safe';
 
 export {
   takeScreenShot,
@@ -14,4 +15,5 @@ export {
   getCrawler,
 
   mkdir,
+  safe,
 };

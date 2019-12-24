@@ -1,7 +1,9 @@
 import Site from './Site';
 import { Table, Column, Model, Default, DataType, ForeignKey } from 'sequelize-typescript';
 
-@Table
+@Table({
+  tableName: 'articles',
+})
 class Article extends Model<Article> {
   @Column(DataType.STRING)
   url: string;

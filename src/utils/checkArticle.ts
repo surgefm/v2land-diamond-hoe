@@ -6,7 +6,7 @@ async function checkArticle(article: ArticleObj): Promise<[Article, boolean]> {
     where: { url: article.url },
     defaults: {
       status: 'ongoing',
-      site: article.site,
+      siteId: article.site.id,
     },
   });
 
