@@ -104,3 +104,6 @@ dist
 .tern-port
 
 snapshots/
+
+.DS_Store
+**/.DS_Store

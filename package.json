@@ -31,6 +31,7 @@
     "typescript": "^3.7.3"
   },
   "dependencies": {
+    "delay": "^4.3.0",
     "generic-pool": "^3.7.1",
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",

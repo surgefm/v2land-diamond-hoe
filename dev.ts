@@ -3,7 +3,6 @@ import initializeSequelize from './src/sequelize';
 import initializeCrawlerManager, { crawlPage } from './src/crawlerManager';
 
 import { getCrawler } from './src/utils';
-import { Article } from './src/models';
 
 import 'source-map-support/register';
 
@@ -16,12 +15,18 @@ async function init(): Promise<void> {
   await initializeCrawlerManager(false);
 
   // Debug below
-  const url = 'http://www.bjnews.com.cn/news/2019/12/24/665710.html';
-  await Article.destroy({ where: { url } });
 
-  const crawler = await getCrawler('www.bjnews.com.cn');
-  const article = await crawlPage(crawler, url);
-  console.log(article);
+  // const url = 'http://politics.people.com.cn/n1/2019/1224/c1024-31520903.html';
+  // await Article.destroy({ where: { url } });
+
+  // const crawler = await getCrawler('news.people.com.cn');
+  // const article = await crawlPage(crawler, url);
+  // console.log(article.get({ plain: true }));
+
+  const crawler = await getCrawler('news.people.com.cn');
+  const page = await global.puppeteerPool.acquire();
+  const articleList = await crawler.getArticleList(page);
+  console.log(articleList);
 }
 
 init();

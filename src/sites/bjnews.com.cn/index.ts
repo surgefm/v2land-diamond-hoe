@@ -1,6 +1,6 @@
-import { ArticleObj, SiteObj, Crawler } from '../../types';
+import { SiteObj, Crawler } from '../../types';
 import { Article } from '../../models';
-import { findOrCreateSite, checkArticle, safe } from '../../utils';
+import { checkArticleWithURL, safe } from '../../utils';
 import { Page } from 'puppeteer';
 
 export const bjNewsComCn: SiteObj = {
@@ -12,12 +12,7 @@ export class BJNewsComCnCrawler extends Crawler {
   site = bjNewsComCn;
 
   async crawlArticle(page: Page, url: string): Promise<Article> {
-    let articleObj: ArticleObj = {
-      site: await findOrCreateSite(bjNewsComCn),
-      url,
-    };
-
-    const [article, proceed] = await checkArticle(articleObj);
+    const [article, proceed] = await checkArticleWithURL(bjNewsComCn, url);
     if (!proceed) return article;
 
     try {

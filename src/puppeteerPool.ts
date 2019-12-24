@@ -5,13 +5,13 @@ import { puppeteerConfig } from '../config';
 
 export default async function initializePuppeteerPool(): Promise<void> {
   const browser = await puppeteer.launch({
-    headless: puppeteerConfig.headless,
+    headless: typeof process.env.HEADLESS === 'undefined' ? true : process.env.HEADLESS !== '0',
   });
 
   const puppeteerFactory: Factory<Page> = {
     create: async (): Promise<Page> => {
       const page = await browser.newPage();
-      await page.setDefaultNavigationTimeout(120000);
+      await page.setDefaultNavigationTimeout(puppeteerConfig.navigationTimeout);
       return page;
     },
     destroy: async (page: Page): Promise<void> => {

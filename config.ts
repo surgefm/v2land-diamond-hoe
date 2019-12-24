@@ -1,5 +1,5 @@
 export const puppeteerConfig = {
-  headless: typeof process.env.HEADLESS === 'undefined' ? true : process.env.HEADLESS !== '0',
+  navigationTimeout: 120000,
 };
 
 export const crawlerConfig = {

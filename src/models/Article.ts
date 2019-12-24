@@ -18,6 +18,9 @@ class Article extends Model<Article> {
   abstract?: string;
 
   @Column
+  source?: string;
+
+  @Column
   time?: Date;
 
   @Column
