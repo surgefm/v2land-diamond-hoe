@@ -12,6 +12,7 @@
     "emitDecoratorMetadata": true,
     "baseUrl": ".",
     "paths": {
+      "~/*": ["./*"],
       "@/*": ["src/*"],
       "@Config": ["config.ts"],
       "@Models": ["src/models"],
@@ -21,7 +22,7 @@
       "@Models/*": ["src/models/*"],
       "@Sites/*": ["src/sites/*"],
       "@Types/*": ["src/types/*"],
-      "@Utils/*": ["src/utils/*"],
+      "@Utils/*": ["src/utils/*"]
     }
   },
   "include": [

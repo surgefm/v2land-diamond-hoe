@@ -1,3 +1,6 @@
+import 'source-map-support/register';
+import 'module-alias/register';
+
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
 
@@ -7,8 +10,6 @@ import * as json from 'koa-json';
 import initializePuppeteerPool from '@/puppeteerPool';
 import initializeSequelize from '@/sequelize';
 import initializeCrawlerManager from '@/crawlerManager';
-
-import 'source-map-support/register';
 
 async function init(): Promise<void> {
   await initializePuppeteerPool();
