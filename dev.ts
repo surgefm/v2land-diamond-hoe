@@ -22,8 +22,9 @@ async function init(): Promise<void> {
   // console.log(article.get({ plain: true }));
 
   const crawler = await getCrawler('www.theinitium.com');
-  const page = await global.puppeteerPool.acquire();
+  const page = await crawler.puppeteerPool.acquire();
   const article = await crawler.getArticleList(page);
+  await crawler.puppeteerPool.destroy(page);
   console.log(article);
 
   // console.log(articleList);

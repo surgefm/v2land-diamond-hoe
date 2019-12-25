@@ -20,7 +20,7 @@ export default async function initializePuppeteerPool(): Promise<void> {
   };
 
   const options: Options = {
-    max: 5,
+    max: puppeteerConfig.maxPageCount,
     min: 0,
   };
 

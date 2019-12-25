@@ -6,7 +6,7 @@ import { crawlerConfig } from '@Config';
 import { takeScreenShot, cleanPageStyle } from '@Utils';
 
 export async function crawlPage(crawler: Crawler, url: string): Promise<Article> {
-  const urlPage = await global.puppeteerPool.acquire();
+  const urlPage = await crawler.puppeteerPool.acquire();
   await urlPage.setViewport({ width: 1024, height: 768 });
 
   try {
@@ -29,14 +29,14 @@ export async function crawlPage(crawler: Crawler, url: string): Promise<Article>
   } catch (err) {
     throw err;
   } finally {
-    await global.puppeteerPool.destroy(urlPage);
+    await crawler.puppeteerPool.destroy(urlPage);
   }
 }
 
 export async function getCrawlingTask(crawler: Crawler): Promise<Article[]> {
-  const page = await global.puppeteerPool.acquire();
+  const page = await crawler.puppeteerPool.acquire();
   const urlList = await crawler.getArticleList(page);
-  await global.puppeteerPool.destroy(page);
+  await crawler.puppeteerPool.destroy(page);
 
   return Promise.all(urlList.map((url: string) => crawlPage(crawler, url)));
 }
@@ -62,6 +62,7 @@ export async function initializeCrawlerManager(crawl = true): Promise<void> {
         try {
           const crawler = new siteExports[siteExport]();
           if (crawler instanceof Crawler) {
+            await crawler.init();
             crawlers.push(crawler as Crawler);
           }
         } catch (err) {}

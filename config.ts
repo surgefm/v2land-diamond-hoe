@@ -1,5 +1,7 @@
 export const puppeteerConfig = {
   navigationTimeout: 120000,
+  maxPageCount: 20,
+  maxSitePageCount: 5,
 };
 
 export const crawlerConfig = {
