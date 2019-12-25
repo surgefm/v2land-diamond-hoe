@@ -1,6 +1,6 @@
-import { SiteObj, Crawler } from '../../types';
-import { Article } from '../../models';
-import { safe, checkArticleWithURL } from '../../utils';
+import { SiteObj, Crawler } from '@Types';
+import { Article } from '@Models';
+import { safe, checkArticleWithURL } from '@Utils';
 import { Page, ElementHandle } from 'puppeteer';
 import delay from 'delay';
 

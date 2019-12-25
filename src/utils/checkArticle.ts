@@ -1,5 +1,5 @@
-import { ArticleObj } from '../types';
-import { Article } from '../models';
+import { ArticleObj } from '@Types';
+import { Article } from '@Models';
 
 async function checkArticle(article: ArticleObj): Promise<[Article, boolean]> {
   const [a, created] = await Article.findOrCreate({

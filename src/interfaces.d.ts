@@ -2,7 +2,7 @@
 import { Pool } from 'generic-pool';
 import { Page } from 'puppeteer';
 import { Sequelize } from 'sequelize-typescript';
-import { Crawler } from './types';
+import { Crawler } from '@Types';
 
 declare global {
   namespace NodeJS {

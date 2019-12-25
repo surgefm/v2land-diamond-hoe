@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
-import { Article, Site } from './models';
-import { dbConfig } from '../config';
+import { Article, Site } from '@Models';
+import { dbConfig } from '@Config';
 
 export default async function (): Promise<void> {
   const sequelize = new Sequelize({

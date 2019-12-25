@@ -1,7 +1,7 @@
 import checkArticle from './checkArticle';
-import { SiteObj, ArticleObj } from '../types';
+import { SiteObj, ArticleObj } from '@Types';
 import findOrCreateSite from './findOrCreateSite';
-import { Article } from '../models';
+import { Article } from '@Models';
 
 async function checkArticleWithURL(site: SiteObj, url: string): Promise<[Article, boolean]> {
   let articleObj: ArticleObj = {

@@ -1,5 +1,5 @@
-import { SiteObj } from '../types';
-import { Site } from '../models';
+import { SiteObj } from '@Types';
+import { Site } from '@Models';
 
 async function getOrCreateSite(site: SiteObj): Promise<Site> {
   const [s, created] = await Site.findOrCreate({

@@ -1,9 +1,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Crawler } from './types';
-import { Article } from './models';
-import { crawlerConfig } from '../config';
-import { takeScreenShot, cleanPageStyle } from './utils';
+import { Crawler } from '@Types';
+import { Article } from '@Models';
+import { crawlerConfig } from '@Config';
+import { takeScreenShot, cleanPageStyle } from '@Utils';
 
 export async function crawlPage(crawler: Crawler, url: string): Promise<Article> {
   const urlPage = await global.puppeteerPool.acquire();

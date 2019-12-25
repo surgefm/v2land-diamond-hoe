@@ -1,6 +1,6 @@
-import { SiteObj, Crawler } from '../../types';
-import { Article } from '../../models';
-import { checkArticleWithURL, safe } from '../../utils';
+import { SiteObj, Crawler } from '@Types';
+import { Article } from '@Models';
+import { checkArticleWithURL, safe } from '@Utils';
 import { Page } from 'puppeteer';
 
 export const bjNewsComCn: SiteObj = {

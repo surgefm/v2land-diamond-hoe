@@ -1,4 +1,4 @@
-import { Site } from '../models';
+import { Site } from '@Models';
 
 interface ArticleObj {
   url: string;

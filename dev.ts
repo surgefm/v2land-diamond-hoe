@@ -1,8 +1,8 @@
-import initializePuppeteerPool from './src/puppeteerPool';
-import initializeSequelize from './src/sequelize';
-import initializeCrawlerManager, { crawlPage } from './src/crawlerManager';
+import initializePuppeteerPool from '@/puppeteerPool';
+import initializeSequelize from '@/sequelize';
+import initializeCrawlerManager, { crawlPage } from '@/crawlerManager';
 
-import { getCrawler } from './src/utils';
+import { getCrawler } from '@Utils';
 
 import 'source-map-support/register';
 

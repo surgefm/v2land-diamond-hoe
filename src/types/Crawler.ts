@@ -1,4 +1,4 @@
-import Article from '../models/Article';
+import Article from '@Models/Article';
 import SiteObj from './SiteObj';
 import { Page } from 'puppeteer';
 

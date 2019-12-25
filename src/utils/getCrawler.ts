@@ -1,4 +1,4 @@
-import { Crawler } from '../types';
+import { Crawler } from '@Types';
 import initializeCrawlerManager from '../crawlerManager';
 
 // Assuming global.crawlers has been initialized.

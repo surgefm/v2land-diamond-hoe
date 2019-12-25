@@ -9,7 +9,20 @@
     "jsx": "react",
     "allowJs": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@Config": ["config.ts"],
+      "@Models": ["src/models"],
+      "@Sites": ["src/sites"],
+      "@Types": ["src/types"],
+      "@Utils": ["src/utils"],
+      "@Models/*": ["src/models/*"],
+      "@Sites/*": ["src/sites/*"],
+      "@Types/*": ["src/types/*"],
+      "@Utils/*": ["src/utils/*"],
+    }
   },
   "include": [
     "src/*",
