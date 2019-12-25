@@ -3,6 +3,7 @@ import { Article } from '@Models';
 import { safe, checkArticleWithURL } from '@Utils';
 import { Page, ElementHandle } from 'puppeteer';
 import delay from 'delay';
+import * as _ from 'lodash';
 
 export const peopleComCn: SiteObj = {
   name: '人民网',
@@ -186,6 +187,8 @@ export class PeopleComCnCrawler extends Crawler {
 
       await category.click();
     }
+
+    urls = _.uniq(urls);
 
     return urls;
   }

@@ -7,7 +7,9 @@ export abstract class Crawler {
 
   // return [article, crawledSuccessfully]
   abstract crawlArticle(page: Page, url: string): Promise<[Article, boolean]>;
-  abstract getArticleList(page: Page): Promise<string[]>;
+  public async getArticleList(page: Page): Promise<string[]> {
+    return [];
+  };
 }
 
 export default Crawler;

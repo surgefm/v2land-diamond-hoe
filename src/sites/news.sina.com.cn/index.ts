@@ -2,6 +2,7 @@ import { SiteObj, Crawler } from '@Types';
 import { Article } from '@Models';
 import { checkArticleWithURL, safe } from '@Utils';
 import { Page } from 'puppeteer';
+import * as _ from 'lodash';
 
 export const newsSinaComCn: SiteObj = {
   name: '新浪新闻',
@@ -75,7 +76,7 @@ export class NewsSinaComCnCrawler extends Crawler {
   async getArticleList(page: Page): Promise<string[]> {
     await page.goto('http://news.sina.com.cn/', { waitUntil: 'networkidle2' });
 
-    const urls: string[] = await page.$$eval(
+    let urls: string[] = await page.$$eval(
       `h1[data-client=headline] a,
        p[data-client=throw] b a,
        ul[data-sudaclick*=blk_news_] li a,
@@ -101,6 +102,8 @@ export class NewsSinaComCnCrawler extends Crawler {
        ol[data-sudaclick=sh2_click01] li a`,
       els => els.map(el => el.getAttribute('href')),
     );
+
+    urls = _.uniq(urls);
 
     return urls;
   }
