@@ -3,6 +3,7 @@ import { Table, Column, Model, Default, DataType, ForeignKey } from 'sequelize-t
 
 @Table({
   tableName: 'articles',
+  freezeTableName: true,
 })
 class Article extends Model<Article> {
   @Column(DataType.STRING)

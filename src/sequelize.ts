@@ -9,5 +9,7 @@ export default async function (): Promise<void> {
     ...dbConfig,
   });
 
+  await sequelize.authenticate();
+
   global.sequelize = sequelize;
 }

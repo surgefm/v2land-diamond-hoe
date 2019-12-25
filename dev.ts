@@ -23,8 +23,8 @@ async function init(): Promise<void> {
 
   const crawler = await getCrawler('news.sina.com.cn');
   const page = await global.puppeteerPool.acquire();
-  const links = await crawler.getArticleList(page);
-  console.log(links);
+  const article = await crawler.crawlArticle(page, 'https://news.sina.com.cn/c/2019-12-24/doc-iihnzhfz8072802.shtml');
+  console.log(article);
 
   // console.log(articleList);
 }

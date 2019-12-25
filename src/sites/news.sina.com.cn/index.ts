@@ -75,7 +75,7 @@ export class NewsSinaComCnCrawler extends Crawler {
   async getArticleList(page: Page): Promise<string[]> {
     await page.goto('http://news.sina.com.cn/', { waitUntil: 'networkidle2' });
 
-    let urls: string[] = await page.$$eval(
+    const urls: string[] = await page.$$eval(
       `h1[data-client=headline] a,
        p[data-client=throw] b a,
        ul[data-sudaclick*=blk_news_] li a,

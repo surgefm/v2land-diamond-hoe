@@ -1,9 +1,9 @@
 import { Table, Column, Model, HasMany, DataType } from 'sequelize-typescript';
 import Article from './Article';
 
-
 @Table({
   tableName: 'sites',
+  freezeTableName: true,
 })
 class Site extends Model<Site> {
   @Column

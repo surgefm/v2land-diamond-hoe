@@ -8,23 +8,29 @@ import { takeScreenShot, cleanPageStyle } from '@Utils';
 export async function crawlPage(crawler: Crawler, url: string): Promise<Article> {
   const urlPage = await global.puppeteerPool.acquire();
   await urlPage.setViewport({ width: 1024, height: 768 });
-  const [article, crawledSuccessfully] = await crawler.crawlArticle(urlPage, url);
 
-  if (article !== null && crawledSuccessfully) {
-    if (crawlerConfig.takeScreenshot) {
-      const filename = `${encodeURIComponent(url)}_${Math.floor(Date.now() / 60000)}`;
-      await takeScreenShot(urlPage, filename);
-      await cleanPageStyle(urlPage);
-      await takeScreenShot(urlPage, `${filename}.clean_style`);
-      article.screenshot = filename;
+  try {
+    const [article, crawledSuccessfully] = await crawler.crawlArticle(urlPage, url);
+
+    if (article !== null && crawledSuccessfully) {
+      if (crawlerConfig.takeScreenshot) {
+        const filename = `${encodeURIComponent(url)}_${Math.floor(Date.now() / 60000)}`;
+        await takeScreenShot(urlPage, filename);
+        await cleanPageStyle(urlPage);
+        await takeScreenShot(urlPage, `${filename}.clean_style`);
+        article.screenshot = filename;
+      }
+
+      article.status = 'crawled';
+      await article.save();
     }
 
-    article.status = 'crawled';
-    await article.save();
+    return article;
+  } catch (err) {
+    throw err;
+  } finally {
+    await global.puppeteerPool.destroy(urlPage);
   }
-
-  await global.puppeteerPool.destroy(urlPage);
-  return article;
 }
 
 export async function getCrawlingTask(crawler: Crawler): Promise<Article[]> {

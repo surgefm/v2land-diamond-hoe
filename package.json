@@ -48,7 +48,7 @@
   "_moduleAliases": {
     "~": "dist",
     "@": "dist/src",
-    "@Config": "dist/src/config.js",
+    "@Config": "dist/config.js",
     "@Models": "dist/src/models",
     "@Sites": "dist/src/sites",
     "@Types": "dist/src/types",
