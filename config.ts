@@ -5,9 +5,7 @@ export const puppeteerConfig = {
 };
 
 export const crawlerConfig = {
-  takeScreenshot: typeof process.env.CRAWLER_SCREENSHOT === 'undefined'
-    ? true
-    : process.env.CRAWLER_SCREENSHOT !== '0',
+  takeScreenshot: process.env.CRAWLER_SCREENSHOT !== '0',
 };
 
 export const dbConfig = {
@@ -15,4 +13,8 @@ export const dbConfig = {
   host: process.env.DB_HOST || '127.0.0.1',
   username: process.env.DB_USERNAME || 'v2land',
   password: process.env.DB_PASSWORD,
+};
+
+export const s3Config = {
+  bucket: process.env.S3_BUCKET,
 };
