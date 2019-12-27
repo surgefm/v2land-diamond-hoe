@@ -1,5 +1,7 @@
 import 'source-map-support/register';
 import 'module-alias/register';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 import initializePuppeteerPool from '@/puppeteerPool';
 import initializeSequelize from '@/sequelize';
@@ -21,13 +23,10 @@ async function init(): Promise<void> {
   // const article = await crawlPage(crawler, url);
   // console.log(article.get({ plain: true }));
 
-  const crawler = await getCrawler('www.theinitium.com');
-  const page = await crawler.puppeteerPool.acquire();
-  const article = await crawler.getArticleList(page);
-  await crawler.puppeteerPool.destroy(page);
-  console.log(article);
-
-  // console.log(articleList);
+  const crawler = await getCrawler('news.sina.com.cn');
+  const url = 'https://news.sina.com.cn/w/2019-12-27/doc-iihnzahk0371944.shtml';
+  const article = await crawlPage(crawler, url);
+  console.log(article.get({ plain: true }));
 }
 
 init();

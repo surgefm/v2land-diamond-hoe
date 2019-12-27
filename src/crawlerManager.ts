@@ -1,13 +1,15 @@
-import * as fs from 'fs';
+import { promises as fs } from 'fs';
 import * as path from 'path';
 import { Crawler } from '@Types';
 import { Article } from '@Models';
 import { crawlerConfig } from '@Config';
 import { takeScreenShot, cleanPageStyle } from '@Utils';
+import { uploadToS3 } from '@/awsS3Manager';
 
 export async function crawlPage(crawler: Crawler, url: string): Promise<Article> {
   const urlPage = await crawler.puppeteerPool.acquire();
   await urlPage.setViewport({ width: 1024, height: 768 });
+  let pageDeleted = false;
 
   try {
     const [article, crawledSuccessfully] = await crawler.crawlArticle(urlPage, url);
@@ -15,10 +17,26 @@ export async function crawlPage(crawler: Crawler, url: string): Promise<Article>
     if (article !== null && crawledSuccessfully) {
       if (crawlerConfig.takeScreenshot) {
         const filename = `${encodeURIComponent(url)}_${Math.floor(Date.now() / 60000)}`;
-        await takeScreenShot(urlPage, filename);
+
+        let [file, p] = await takeScreenShot(urlPage, filename);
+        const fileKey = await uploadToS3({
+          file,
+          key: `${filename}.jpeg`,
+          path: p,
+          deleteOriginalFile: true,
+        });
+        article.screenshot = fileKey;
+
         await cleanPageStyle(urlPage);
-        await takeScreenShot(urlPage, `${filename}.clean_style`);
-        article.screenshot = filename;
+        [file, p] = await takeScreenShot(urlPage, `${filename}.clean_style`);
+        await crawler.puppeteerPool.destroy(urlPage);
+        pageDeleted = true;
+        await uploadToS3({
+          file,
+          key: `${filename}.clean_style.jpeg`,
+          path: p,
+          deleteOriginalFile: true,
+        });
       }
 
       article.status = 'crawled';
@@ -29,7 +47,9 @@ export async function crawlPage(crawler: Crawler, url: string): Promise<Article>
   } catch (err) {
     throw err;
   } finally {
-    await crawler.puppeteerPool.destroy(urlPage);
+    if (!pageDeleted) {
+      await crawler.puppeteerPool.destroy(urlPage);
+    }
   }
 }
 
@@ -54,7 +74,7 @@ export async function crawlAll(): Promise<void> {
 export async function initializeCrawlerManager(crawl = true): Promise<void> {
   const crawlers: Crawler[] = [];
 
-  const sites = fs.readdirSync(path.join(__dirname, 'sites'));
+  const sites = await fs.readdir(path.join(__dirname, 'sites'));
   for (const site of sites) {
     const siteExports = await import(path.join(__dirname, 'sites', site));
     for (const siteExport in siteExports) {
