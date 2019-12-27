@@ -5,7 +5,7 @@ dotenv.config();
 
 import initializePuppeteerPool from '@/puppeteerPool';
 import initializeSequelize from '@/sequelize';
-import initializeCrawlerManager, { crawlPage } from '@/crawlerManager';
+import initializeCrawlerManager from '@/crawlerManager';
 
 import { getCrawler } from '@Utils';
 
@@ -18,15 +18,11 @@ async function init(): Promise<void> {
   await initializeCrawlerManager(false);
 
   // Debug below
-
-  // const crawler = await getCrawler('news.people.com.cn');
-  // const article = await crawlPage(crawler, url);
-  // console.log(article.get({ plain: true }));
-
-  const crawler = await getCrawler('news.sina.com.cn');
-  const url = 'https://news.sina.com.cn/w/2019-12-27/doc-iihnzahk0371944.shtml';
-  const article = await crawlPage(crawler, url);
-  console.log(article.get({ plain: true }));
+  const crawler = await getCrawler('news.163.com');
+  const page = await crawler.puppeteerPool.acquire();
+  const urls = await crawler.getArticleList(page);
+  await crawler.puppeteerPool.destroy(page);
+  console.log(urls);
 }
 
 init();

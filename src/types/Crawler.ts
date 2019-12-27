@@ -9,7 +9,7 @@ export abstract class Crawler {
   abstract site: SiteObj;
   public puppeteerPool: Pool<Page>;
 
-  public async init(): Promise<Crawler> {
+  public async init(maxSitePageCount?: number): Promise<Crawler> {
     if (typeof global.puppeteerPool === 'undefined') {
       await initializePuppeteerPool();
     }
@@ -17,7 +17,9 @@ export abstract class Crawler {
       create: async (): Promise<Page> => global.puppeteerPool.acquire(),
       destroy: async (page: Page): Promise<void> => global.puppeteerPool.destroy(page),
     }, {
-      max: puppeteerConfig.maxSitePageCount,
+      max: typeof maxSitePageCount === 'undefined'
+        ? puppeteerConfig.maxSitePageCount
+        : maxSitePageCount,
       min: 0,
     });
     return this;
