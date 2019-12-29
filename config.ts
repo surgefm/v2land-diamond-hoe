@@ -6,6 +6,9 @@ export const puppeteerConfig = {
 
 export const crawlerConfig = {
   takeScreenshot: process.env.CRAWLER_SCREENSHOT !== '0',
+  interval: typeof process.env.CRAWLER_INTERVAL === 'undefined'
+    ? 15 * 60 * 1000
+    : +process.env.CRAWLER_INTERVAL,
 };
 
 export const dbConfig = {

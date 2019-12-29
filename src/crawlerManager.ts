@@ -3,10 +3,15 @@ import * as path from 'path';
 import { Crawler } from '@Types';
 import { Article } from '@Models';
 import { crawlerConfig } from '@Config';
-import { takeScreenShot, cleanPageStyle } from '@Utils';
+import { takeScreenShot, cleanPageStyle, getCrawler } from '@Utils';
 import { uploadToS3 } from '@/awsS3Manager';
 
-export async function crawlPage(crawler: Crawler, url: string): Promise<Article> {
+export async function crawlPage(url: string): Promise<Article> {
+  const crawler = await getCrawler(url);
+  if (crawler === null) {
+    throw new Error('Crawler for this URL cannot be found.');
+  }
+
   const urlPage = await crawler.puppeteerPool.acquire();
   await urlPage.setViewport({ width: 1024, height: 768 });
   let pageDeleted = false;
@@ -58,7 +63,7 @@ export async function getCrawlingTask(crawler: Crawler): Promise<Article[]> {
   const urlList = await crawler.getArticleList(page);
   await crawler.puppeteerPool.destroy(page);
 
-  return Promise.all(urlList.map((url: string) => crawlPage(crawler, url)));
+  return Promise.all(urlList.map((url: string) => crawlPage(url)));
 }
 
 export async function crawlAll(): Promise<void> {
@@ -68,24 +73,32 @@ export async function crawlAll(): Promise<void> {
     await Promise.all(tasks);
   } catch (err) {}
 
-  setTimeout(crawlAll, 15 * 60 * 1000);
+  setTimeout(crawlAll, crawlerConfig.interval);
 }
 
 export async function initializeCrawlerManager(crawl = true): Promise<void> {
   const crawlers: Crawler[] = [];
+  global.domainToCrawlerMap = {};
 
-  const sites = await fs.readdir(path.join(__dirname, 'sites'));
-  for (const site of sites) {
-    const siteExports = await import(path.join(__dirname, 'sites', site));
-    for (const siteExport in siteExports) {
-      if (typeof siteExports[siteExport] === 'function') {
-        try {
-          const crawler = new siteExports[siteExport]();
-          if (crawler instanceof Crawler) {
-            await crawler.init();
-            crawlers.push(crawler as Crawler);
-          }
-        } catch (err) {}
+  const dirs = await fs.readdir(path.join(__dirname, 'sites'));
+  for (const dir of dirs) {
+    let sites = await fs.readdir(path.join(__dirname, 'sites', dir));
+    sites = sites.filter(site => site.endsWith('.js'));
+    for (const site of sites) {
+      const siteExports = await import(path.join(__dirname, 'sites', dir, site));
+      for (const siteExport in siteExports) {
+        if (typeof siteExports[siteExport] === 'function') {
+          try {
+            const crawler = new siteExports[siteExport]();
+            if (crawler instanceof Crawler) {
+              await crawler.init();
+              crawlers.push(crawler as Crawler);
+              for (const domain of crawler.domains) {
+                global.domainToCrawlerMap[domain] = crawler;
+              }
+            }
+          } catch (err) {}
+        }
       }
     }
   }

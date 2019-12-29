@@ -1,17 +1,19 @@
 import { Crawler } from '@Types';
 import initializeCrawlerManager from '../crawlerManager';
 
-// Assuming global.crawlers has been initialized.
-async function getCrawler(domain: string): Promise<Crawler> {
-  if (typeof global.crawlers === 'undefined') {
+export async function getCrawlerWithDomain(domain: string): Promise<Crawler> {
+  if (typeof global.domainToCrawlerMap === 'undefined') {
     await initializeCrawlerManager(false);
   }
 
-  for (const crawler of global.crawlers) {
-    if (crawler.site.domains.includes(domain)) {
-      return crawler;
-    }
-  }
+  return global.domainToCrawlerMap[domain] || null;
 }
 
-export default getCrawler;
+export async function getCrawler(url: string): Promise<Crawler> {
+  const crawler = await getCrawlerWithDomain(url);
+  if (crawler !== null) return crawler;
+
+  const Url = new URL(url);
+  const host = Url.hostname;
+  return getCrawlerWithDomain(host);
+}

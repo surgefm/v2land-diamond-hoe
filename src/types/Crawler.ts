@@ -7,12 +7,16 @@ import { Pool, createPool } from 'generic-pool';
 
 export abstract class Crawler {
   abstract site: SiteObj;
+  public domains: string[] = [];
   public puppeteerPool: Pool<Page>;
 
   public async init(maxSitePageCount?: number): Promise<Crawler> {
+    this.domains = this.site.domains;
+
     if (typeof global.puppeteerPool === 'undefined') {
       await initializePuppeteerPool();
     }
+
     this.puppeteerPool = createPool({
       create: async (): Promise<Page> => global.puppeteerPool.acquire(),
       destroy: async (page: Page): Promise<void> => global.puppeteerPool.destroy(page),
@@ -22,6 +26,7 @@ export abstract class Crawler {
         : maxSitePageCount,
       min: 0,
     });
+
     return this;
   };
 

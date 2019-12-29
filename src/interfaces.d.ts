@@ -11,6 +11,7 @@ declare global {
       puppeteerPool: Pool<Page>;
       sequelize: Sequelize;
       crawlers: Crawler[];
+      domainToCrawlerMap: Record<string, Crawler>;
       s3: S3;
     }
   }

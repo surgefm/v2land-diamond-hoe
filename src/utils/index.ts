@@ -3,7 +3,7 @@ import findOrCreateSite from './findOrCreateSite';
 import checkArticle from './checkArticle';
 import checkArticleWithURL from './checkArticleWithURL';
 import cleanPageStyle from './cleanPageStyle';
-import getCrawler from './getCrawler';
+import { getCrawler, getCrawlerWithDomain } from './getCrawler';
 import removeURLQuery from './removeURLQuery';
 
 import mkdir from './mkdir';
@@ -16,6 +16,7 @@ export {
   checkArticleWithURL,
   cleanPageStyle,
   getCrawler,
+  getCrawlerWithDomain,
   removeURLQuery,
 
   mkdir,
