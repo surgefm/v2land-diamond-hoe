@@ -4,6 +4,7 @@ import checkArticle from './checkArticle';
 import checkArticleWithURL from './checkArticleWithURL';
 import cleanPageStyle from './cleanPageStyle';
 import getCrawler from './getCrawler';
+import removeURLQuery from './removeURLQuery';
 
 import mkdir from './mkdir';
 import safe from './safe';
@@ -15,6 +16,7 @@ export {
   checkArticleWithURL,
   cleanPageStyle,
   getCrawler,
+  removeURLQuery,
 
   mkdir,
   safe,
