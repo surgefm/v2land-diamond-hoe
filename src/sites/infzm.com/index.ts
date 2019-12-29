@@ -24,7 +24,7 @@ export class InfzmComCrawler extends Crawler {
       article.title = await page.$eval('div.nfzm-content__title h1', el => el.textContent);
       article.abstract = await safe(page.$eval('meta[name="description"]', el => el.getAttribute('content')));
       article.content = await page.$$eval(
-        'div.nfzm-content__fulltext p:not(.contentImg)',
+        'div.nfzm-content__fulltext p:not(.contentImg), div.nfzm-content__content blockquote.nfzm-bq',
         els => els.map(el => el.textContent).join('\n'),
       );
       article.source = await safe(page.$eval('meta[name="author"]', el => el.getAttribute('content')));
