@@ -5,16 +5,16 @@ import { Page } from 'puppeteer';
 import delay from 'delay';
 import * as _ from 'lodash';
 
-export const newsQQCom: SiteObj = {
+export const newQQCom: SiteObj = {
   name: '腾讯新闻',
   domains: ['new.qq.com'],
 };
 
-export class NewsQQComCrawler extends Crawler {
-  site = newsQQCom;
+export class NewQQComCrawler extends Crawler {
+  site = newQQCom;
 
   async crawlArticle(page: Page, url: string): Promise<[Article, boolean]> {
-    const [article, proceed] = await checkArticleWithURL(newsQQCom, url);
+    const [article, proceed] = await checkArticleWithURL(newQQCom, url);
     if (!proceed) return [article, false];
 
     try {
