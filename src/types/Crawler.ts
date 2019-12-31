@@ -7,11 +7,13 @@ import { Pool, createPool } from 'generic-pool';
 
 export abstract class Crawler {
   abstract site: SiteObj;
-  public domains: string[] = [];
+  public domains: string[];
   public puppeteerPool: Pool<Page>;
 
   public async init(maxSitePageCount?: number): Promise<Crawler> {
-    this.domains = this.site.domains;
+    if (typeof this.domains === 'undefined') {
+      this.domains = this.site.domains;
+    }
 
     if (typeof global.puppeteerPool === 'undefined') {
       await initializePuppeteerPool();
