@@ -21,6 +21,7 @@ export const caixinCom: SiteObj = {
     'science.caixin.com',
     'companies.caixin.com',
     'cnreform.caixin.com',
+    'en.caixin.com',
   ],
 };
 
