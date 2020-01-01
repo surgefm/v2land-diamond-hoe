@@ -19,6 +19,7 @@
           "ArrowFunctionExpression": false,
           "FunctionExpression": false
       }
-    }]
+    }],
+    "@typescript-eslint/no-explicit-any": false
   }
 }

@@ -37,7 +37,6 @@ export const newsSinaComCn: SiteObj = {
     'cul.news.sina.com.cn',
     'lottery.sina.com.cn',
     'games.sina.com.cn',
-    'mail.sina.com.cn',
     'english.sina.com',
     'jiaoyi.sina.com.cn',
     'jr.sina.com.cn',

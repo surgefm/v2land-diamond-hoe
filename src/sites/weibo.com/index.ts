@@ -146,6 +146,7 @@ export class MWeiboCnCrawler extends Crawler {
 export class CardWeiboComCrawler extends Crawler {
   site = weiboCom;
   domains = ['card.weibo.com'];
+
   async crawlArticle(page: Page, url: string): Promise<[Article, boolean]> {
     url = removeURLQuery(url);
     const start = 'https://card.weibo.com/article/m/show/id/';
