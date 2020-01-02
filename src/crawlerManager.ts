@@ -34,6 +34,8 @@ export async function crawlPage(url: string): Promise<Article> {
     const [article, crawledSuccessfully] = await crawler.crawlArticle(urlPage, url);
 
     if (article !== null && crawledSuccessfully) {
+      url = article.url;
+
       if (crawlerConfig.takeScreenshot) {
         const filename = `${encodeURIComponent(url)}_${Math.floor(Date.now() / 60000)}`;
 
