@@ -2,7 +2,7 @@
 import { Pool } from 'generic-pool';
 import { Page } from 'puppeteer';
 import { Sequelize } from 'sequelize-typescript';
-import { Crawler, Proxy } from '@Types';
+import { Crawler, Proxy, ProxyCrawler } from '@Types';
 import { S3 } from 'aws-sdk';
 
 declare global {
@@ -14,6 +14,7 @@ declare global {
       domainToCrawlerMap: Record<string, Crawler>;
       s3: S3;
       proxies: Proxy[];
+      proxyCrawlers: ProxyCrawler[];
     }
   }
 }

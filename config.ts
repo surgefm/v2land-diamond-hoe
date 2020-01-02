@@ -21,3 +21,9 @@ export const dbConfig = {
 export const s3Config = {
   bucket: process.env.S3_BUCKET,
 };
+
+export const proxyCrawlerConfig = {
+  interval: typeof process.env.PROXY_CRAWLER_INTERVAL === 'undefined'
+    ? 60 * 60 * 1000
+    : +process.env.PROXY_CRAWLER_INTERVAL,
+}
