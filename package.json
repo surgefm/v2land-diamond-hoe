@@ -58,6 +58,7 @@
     "@Models": "dist/src/models",
     "@Sites": "dist/src/sites",
     "@Types": "dist/src/types",
-    "@Utils": "dist/src/utils"
+    "@Utils": "dist/src/utils",
+    "@Proxies": "dist/src/proxies"
   }
 }
