@@ -19,10 +19,12 @@
       "@Sites": ["src/sites"],
       "@Types": ["src/types"],
       "@Utils": ["src/utils"],
+      "@Proxies": ["src/proxies"],
       "@Models/*": ["src/models/*"],
       "@Sites/*": ["src/sites/*"],
       "@Types/*": ["src/types/*"],
-      "@Utils/*": ["src/utils/*"]
+      "@Utils/*": ["src/utils/*"],
+      "@Proxies/*": ["src/proxies/*"]
     }
   },
   "include": [
