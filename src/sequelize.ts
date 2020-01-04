@@ -10,6 +10,7 @@ export default async function (): Promise<void> {
   });
 
   await sequelize.authenticate();
+  await sequelize.sync();
 
   global.sequelize = sequelize;
 }

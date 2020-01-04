@@ -4,11 +4,14 @@ import SiteObj from './SiteObj';
 import initializePuppeteerPool from '@/puppeteerPool';
 import { Page } from 'puppeteer';
 import { Pool, createPool } from 'generic-pool';
+import { ProxyOptions } from '@/proxyPool';
 
 export abstract class Crawler {
   abstract site: SiteObj;
   public domains: string[];
   public puppeteerPool: Pool<Page>;
+  public useProxy: boolean = false;
+  public proxyOptions: ProxyOptions = {};
 
   public async init(maxSitePageCount?: number): Promise<Crawler> {
     if (typeof this.domains === 'undefined') {

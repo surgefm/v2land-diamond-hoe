@@ -1,10 +1,12 @@
 import { promises as fs } from 'fs';
 import * as path from 'path';
-import { Crawler } from '@Types';
+import { Crawler, Proxy } from '@Types';
 import { Article } from '@Models';
 import { crawlerConfig } from '@Config';
-import { takeScreenShot, cleanPageStyle, getCrawler } from '@Utils';
+import { takeScreenShot, cleanPageStyle, getCrawler, useProxy } from '@Utils';
 import { uploadToS3 } from '@/awsS3Manager';
+import { acquireProxy } from '@/proxyPool';
+import { Page } from 'puppeteer';
 
 export async function crawlPage(url: string): Promise<Article> {
   const crawler = await getCrawler(url);
@@ -12,8 +14,19 @@ export async function crawlPage(url: string): Promise<Article> {
     throw new Error('Crawler for this URL cannot be found.');
   }
 
-  const urlPage = await crawler.puppeteerPool.acquire();
-  await urlPage.setViewport({ width: 1024, height: 768 });
+  let urlPage: Page, proxy: Proxy;
+  if (crawler.useProxy) {
+    [urlPage, proxy] = await Promise.all([
+      crawler.puppeteerPool.acquire(),
+      acquireProxy(crawler.proxyOptions),
+    ]);
+    if (proxy !== null) {
+      await useProxy(urlPage, proxy);
+    }
+  } else {
+    urlPage = await crawler.puppeteerPool.acquire();
+  }
+  await urlPage.setViewport({ width: 1440, height: 768 });
   let pageDeleted = false;
 
   try {
