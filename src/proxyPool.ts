@@ -2,6 +2,12 @@ import { promises as fs } from 'fs';
 import * as path from 'path';
 import * as _ from 'lodash';
 import delay from 'delay';
+import * as chalk from 'chalk';
+import {
+  Options as ProgressOptions,
+  MultiBar as CliProgress,
+  Presets as progressPresets,
+} from 'cli-progress';
 
 import { ProxyCrawler, Proxy, ProxyType, ProxyRegion } from '@Types';
 import { proxyCrawlerConfig } from '@Config';
@@ -82,9 +88,31 @@ export async function updateProxyPool(): Promise<void> {
 
   const proxyStrings = global.proxies.map(proxy => proxy.toString(true));
 
+  const progress = new CliProgress({
+    format: ((options: ProgressOptions, params: any, payload: string) => {
+      const bar = options.barCompleteString.substr(0, Math.round(params.progress * options.barsize)) +
+        options.barIncompleteString.substr(0, Math.round((1.0 - params.progress) * options.barsize));
+      const proxyStr = chalk.bgBlue('Proxy');
+      if (params.value === -1) {
+        return `${proxyStr} Crawling proxies from ${payload}...`;
+      } else if (params.value === params.total) {
+        return `${proxyStr} ${payload} [${bar}] | ${params.value}/${params.total}`;
+      }
+
+      return `${proxyStr} ${payload} [${bar}] | ETA: ${params.eta}s | ${params.value}/${params.total}`;
+    }) as any,
+  }, progressPresets.legacy);
+
   await Promise.all(global.proxyCrawlers.map(proxyCrawler => (async () => {
+    const subProgress = progress.create(0, -1, proxyCrawler.name);
     const newProxies = await proxyCrawler.crawlProxies();
-    await Promise.all(newProxies.map(proxy => proxy.benchmark()));
+    subProgress.setTotal(newProxies.length);
+    subProgress.update(0);
+    await Promise.all(newProxies.map(proxy => (async () => {
+      await proxy.benchmark();
+      subProgress.increment(1);
+    })()));
+    subProgress.stop();
     newProxies
       .filter(proxy => proxy.latency >= 0 && proxyStrings.indexOf(proxy.toString(true)) < 0)
       .map(proxy => {
@@ -94,6 +122,7 @@ export async function updateProxyPool(): Promise<void> {
       });
   })()));
 
+  progress.stop();
   isProxyPoolReady = true;
 }
 
