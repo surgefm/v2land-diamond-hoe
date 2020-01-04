@@ -86,7 +86,7 @@ export class Proxy {
       this.latency = -1;
     }
 
-    this.benchmarkIntervalClock = setInterval(this.benchmark, proxyCrawlerConfig.interval);
+    this.benchmarkIntervalClock = setInterval(this.benchmark.bind(this), proxyCrawlerConfig.interval);
 
     return this.latency;
   }

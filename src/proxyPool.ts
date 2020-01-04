@@ -86,8 +86,6 @@ export async function releaseProxy(proxy: Proxy): Promise<void> {
 export async function updateProxyPool(): Promise<void> {
   setTimeout(updateProxyPool, proxyCrawlerConfig.interval);
 
-  const proxyStrings = global.proxies.map(proxy => proxy.toString(true));
-
   const progress = new CliProgress({
     format: ((options: ProgressOptions, params: any, payload: string) => {
       const bar = options.barCompleteString.substr(0, Math.round(params.progress * options.barsize)) +
@@ -103,18 +101,23 @@ export async function updateProxyPool(): Promise<void> {
     }) as any,
   }, progressPresets.legacy);
 
+  const proxyStrings = global.proxies.map(proxy => proxy.toString(true));
+
   await Promise.all(global.proxyCrawlers.map(proxyCrawler => (async () => {
     const subProgress = progress.create(0, -1, proxyCrawler.name);
-    const newProxies = await proxyCrawler.crawlProxies();
+    let newProxies = await proxyCrawler.crawlProxies();
+    newProxies = newProxies.filter(proxy => proxyStrings.indexOf(proxy.toString(true)) < 0);
     subProgress.setTotal(newProxies.length);
     subProgress.update(0);
+
     await Promise.all(newProxies.map(proxy => (async () => {
       await proxy.benchmark();
       subProgress.increment(1);
     })()));
     subProgress.stop();
+
     newProxies
-      .filter(proxy => proxy.latency >= 0 && proxyStrings.indexOf(proxy.toString(true)) < 0)
+      .filter(proxy => proxy.latency >= 0)
       .map(proxy => {
         global.proxies.push(proxy);
         processQueue(proxy);
