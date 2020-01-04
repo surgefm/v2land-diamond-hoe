@@ -1,4 +1,4 @@
-import { SiteObj, Crawler } from '@Types';
+import { SiteObj, Crawler, ProxyType } from '@Types';
 import { Article } from '@Models';
 import { checkArticleWithURL, safe } from '@Utils';
 import { Page, ElementHandle } from 'puppeteer';
@@ -17,10 +17,7 @@ export const news163Com: SiteObj = {
 
 export class News163ComCrawler extends Crawler {
   site = news163Com;
-
-  public async init(): Promise<Crawler> {
-    return super.init(2);
-  }
+  useProxy = true;
 
   async crawlArticle(page: Page, url: string): Promise<[Article, boolean]> {
     const [article, proceed] = await checkArticleWithURL(news163Com, url);
@@ -38,6 +35,7 @@ export class News163ComCrawler extends Crawler {
         els => els
           .filter(el => el.children.length === 0)
           .map(el => el.textContent.trim())
+          .filter(el => el.length > 0)
           .join('\n'),
       );
       const timeStr = await page.$eval('div.post_time_source', el => el.textContent.trim().split('　')[0]);

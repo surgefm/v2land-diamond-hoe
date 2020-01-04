@@ -43,12 +43,12 @@ export class ProxyListPlusProxyCrawler extends ProxyCrawler {
         proxyType = el[3] === 'Socks5' ? ProxyType.SOCKS5 : ProxyType.SOCKS4;
       }
 
-      const proxy: Proxy = {
-        address: el[1].trim(),
-        port: +el[2].trim(),
-        region: ProxyRegion.oversea,
-        type: proxyType,
-      };
+      const proxy = new Proxy(
+        el[1].trim(),
+        +el[2].trim(),
+        proxyType,
+        ProxyRegion.oversea,
+      );
 
       return proxy;
     });

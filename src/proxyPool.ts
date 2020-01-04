@@ -5,21 +5,31 @@ import delay from 'delay';
 
 import { ProxyCrawler, Proxy, ProxyType, ProxyRegion } from '@Types';
 import { proxyCrawlerConfig } from '@Config';
+import { PriorityQueue } from '@Utils';
 
-let proxyPoolReady = false;
+let isProxyPoolReady = false;
+let hasInitializationBegun = false;
+
+const priorityQueue = new PriorityQueue<(proxy?: Proxy) => any, Proxy>();
+
+function processQueue(proxy: Proxy) {
+  const proxyRequest = priorityQueue.poll(proxy);
+  if (proxyRequest !== null) {
+    proxyRequest(proxy);
+  }
+}
 
 export interface ProxyOptions {
   regions?: ProxyRegion[],
   types?: ProxyType[],
 }
 
-export async function acquireProxy(options?: ProxyOptions): Promise<Proxy> {
-  if (!proxyPoolReady) {
-    await delay(1000);
-    return acquireProxy(options);
+export async function acquireProxy(options: ProxyOptions = {}): Promise<Proxy> {
+  if (!hasInitializationBegun) {
+    await initializeProxyPool();
   }
 
-  const proxies = global.proxies.filter(proxy => {
+  const validate = (proxy: Proxy) => {
     if ((typeof proxy.latency !== 'undefined' && proxy.latency < 0) ||
       (typeof options.regions !== 'undefined' && !options.regions.includes(proxy.region)) ||
       (typeof options.types !== 'undefined' && !options.types.includes(proxy.type))) {
@@ -27,30 +37,71 @@ export async function acquireProxy(options?: ProxyOptions): Promise<Proxy> {
     }
 
     return true;
-  });
+  }
 
-  return proxies[Math.floor(Math.random() * proxies.length)];
+  const proxies = global.proxies.filter(validate);
+
+  if (proxies.length === 0) {
+    if (isProxyPoolReady) return null;
+    else {
+      await delay(500);
+      return acquireProxy(options);
+    }
+  }
+  let availableProxies = proxies.filter(proxy => !proxy.inUse);
+
+  if (availableProxies.length > 0) {
+    const proxy = _.minBy(availableProxies, (proxy: Proxy) => proxy.lastUse.getTime());
+    proxy.inUse = true;
+    return proxy;
+  }
+
+  return new Promise(resolve => {
+    priorityQueue.push(
+      (proxy: Proxy) => {
+        proxy.inUse = true;
+        resolve(proxy);
+      },
+      { validate: (input: Proxy) => !input.inUse && validate(input) },
+    );
+  });
+}
+
+export async function releaseProxy(proxy: Proxy): Promise<void> {
+  if (proxy === null) return;
+
+  await delay(500);
+  proxy.lastUse = new Date();
+  proxy.inUse = false;
+
+  processQueue(proxy);
 }
 
 export async function updateProxyPool(): Promise<void> {
   setTimeout(updateProxyPool, proxyCrawlerConfig.interval);
 
-  const proxyToString = (proxy: Proxy) => {
-    return `${proxy.type} ${proxy.address}:${proxy.port}`;
-  };
+  const proxyStrings = global.proxies.map(proxy => proxy.toString(true));
 
-  for (const proxyCrawler of global.proxyCrawlers) {
-    global.proxies = _.uniqBy(
-      global.proxies.concat(await proxyCrawler.crawlProxies()),
-      proxyToString,
-    );
-  }
+  await Promise.all(global.proxyCrawlers.map(proxyCrawler => (async () => {
+    const newProxies = await proxyCrawler.crawlProxies();
+    await Promise.all(newProxies.map(proxy => proxy.benchmark()));
+    newProxies
+      .filter(proxy => proxy.latency >= 0 && proxyStrings.indexOf(proxy.toString(true)) < 0)
+      .map(proxy => {
+        global.proxies.push(proxy);
+        processQueue(proxy);
+        proxyStrings.push(proxy.toString(true));
+      });
+  })()));
 
-  proxyPoolReady = true;
+  isProxyPoolReady = true;
 }
 
 export async function initializeProxyPool(): Promise<void> {
+  hasInitializationBegun = true;
+
   global.proxies = [];
+  global.proxyCrawlers = [];
 
   let dirs = await fs.readdir(path.join(__dirname, 'proxies'));
   dirs = dirs.filter(proxyCrawler => proxyCrawler.endsWith('.js'));

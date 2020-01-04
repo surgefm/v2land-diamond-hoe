@@ -6,28 +6,28 @@ import { Table, Column, Model, Default, DataType, ForeignKey } from 'sequelize-t
   freezeTableName: true,
 })
 class Article extends Model<Article> {
-  @Column(DataType.STRING)
+  @Column(DataType.TEXT)
   url: string;
 
-  @Column
+  @Column(DataType.TEXT)
   title?: string;
 
-  @Column
+  @Column(DataType.TEXT)
   content?: string;
 
-  @Column
+  @Column(DataType.TEXT)
   abstract?: string;
 
-  @Column
+  @Column(DataType.TEXT)
   source?: string;
 
   @Column
   time?: Date;
 
-  @Column
+  @Column(DataType.TEXT)
   html?: string;
 
-  @Column
+  @Column(DataType.TEXT)
   screenshot?: string;
 
   @Default('pending')

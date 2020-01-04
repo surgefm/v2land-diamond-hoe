@@ -5,6 +5,7 @@ import checkArticleWithURL from './checkArticleWithURL';
 import cleanPageStyle from './cleanPageStyle';
 import { getCrawler, getCrawlerWithDomain } from './getCrawler';
 import removeURLQuery from './removeURLQuery';
+import useProxy from './useProxy';
 
 import { PriorityQueue, PriorityQueueOptions } from './PriorityQueue';
 
@@ -20,6 +21,7 @@ export {
   getCrawler,
   getCrawlerWithDomain,
   removeURLQuery,
+  useProxy,
 
   PriorityQueue,
   PriorityQueueOptions,

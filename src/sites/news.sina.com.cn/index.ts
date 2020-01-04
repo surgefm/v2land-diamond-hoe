@@ -46,6 +46,7 @@ export const newsSinaComCn: SiteObj = {
 
 export class NewsSinaComCnCrawler extends Crawler {
   site = newsSinaComCn;
+  useProxy = true;
 
   async crawlArticle(page: Page, url: string): Promise<[Article, boolean]> {
     const [article, proceed] = await checkArticleWithURL(newsSinaComCn, url);
@@ -59,7 +60,7 @@ export class NewsSinaComCnCrawler extends Crawler {
       article.abstract = await safe(page.$eval('meta[name=description]', el => el.getAttribute('content')));
       article.content = await page.$$eval(
         'div.article-content #article p',
-        els => els.map(el => el.textContent.trim()).join('\n'),
+        els => els.map(el => el.textContent.trim()).filter(el => el.length > 0).join('\n'),
       );
       const timeStr = await page.$eval('div.date-source span.date', el => el.textContent);
       article.time = new Date(timeStr.replace('年', '-').replace('月', '-').replace('日', ' ') + ' GMT+8');
