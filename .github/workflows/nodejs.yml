@@ -24,9 +24,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: GitHub Action for Yarn
       uses: Borales/actions-yarn@v2.1.0
-    - name: dev
+    - name: Compile
       run: |
         yarn
-        yarn dev
+        node node_modules/gulp-cli/bin/gulp.js scripts
       env:
         CI: true
