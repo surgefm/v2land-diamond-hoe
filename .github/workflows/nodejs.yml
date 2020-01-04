@@ -24,10 +24,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: GitHub Action for Yarn
       uses: Borales/actions-yarn@v2.1.0
-      with:
-        cmd: yarn
     - name: dev
       run: |
+        yarn
         yarn dev
       env:
         CI: true
