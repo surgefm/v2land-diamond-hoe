@@ -58,7 +58,10 @@ export class ThepaperCnCrawler extends Crawler {
         article.title = await page.$eval('.newscontent .news_title', el => el.textContent.trim());
         console.log(article.title);
         article.abstract = null; // the abstract is not on the article page, but on the article list page
-        article.content = await page.$eval('.newscontent .news_txt', el => el.textContent.trim());
+        article.content = await page.$eval(
+          '.newscontent .news_txt', 
+          el => Array.from(el.childNodes).map(x=>x.textContent.trim()).filter(t => t.length !== 0).join('\n')
+        );
         article.content = article.content.substring(0, 20000); // cut off for SQL
         let timeHTML = await page.$eval('.newscontent .news_about', el => el.innerHTML);
         article.time = extractTime(timeHTML);
