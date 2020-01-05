@@ -27,8 +27,8 @@ export class ThepaperCnCrawler extends Crawler {
       await page.goto(url, { waitUntil: 'networkidle2' });
       
       article.url = url;
-      article.html = (await page.content()).substring(0, 20000);
-      article.source = null; // all thepaper news are original
+      article.html = await page.content();
+      article.source = null; // all thepaper.cn articles are original
       
       function extractTime(text: String): Date {
         let regExp = /\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}/;
@@ -42,27 +42,21 @@ export class ThepaperCnCrawler extends Crawler {
       }
 
       // for video news
-      if(page.$('.video_news_detail')) {
-        console.log("VIDEO")
+      if(await page.$('.video_news_detail')) {
         article.title = await page.$eval('.video_txt_detail .video_txt_t h2', el => el.textContent.trim());
-        console.log(article.title);
         article.abstract = await page.$eval('.video_txt_detail .video_txt_l p', el => el.textContent.trim());
-        console.log(article.abstract);
         article.content = article.abstract;
         let timeHTML = await page.$eval('.video_info_first .video_info_left', el => el.innerHTML);
         article.time = extractTime(timeHTML);
-        console.log(article.time);
 
       // for text news
       } else {
         article.title = await page.$eval('.newscontent .news_title', el => el.textContent.trim());
-        console.log(article.title);
-        article.abstract = null; // the abstract is not on the article page, but on the article list page
         article.content = await page.$eval(
           '.newscontent .news_txt', 
           el => Array.from(el.childNodes).map(x=>x.textContent.trim()).filter(t => t.length !== 0).join('\n')
         );
-        article.content = article.content.substring(0, 20000); // cut off for SQL
+        article.abstract = article.content.substring(0, 200); // thepaper.cn has no abstract; use content as abstract
         let timeHTML = await page.$eval('.newscontent .news_about', el => el.innerHTML);
         article.time = extractTime(timeHTML);
       }
@@ -70,7 +64,6 @@ export class ThepaperCnCrawler extends Crawler {
       return [await article.save(), true];
 
     } catch (err) {
-      console.log("======== ERR =========");
       article.status = 'pending';
       return [await article.save(), false];
     }
