@@ -17,7 +17,7 @@ export class MThepaperCnCrawler extends Crawler {
   site = thepaperCn;
   domains = ['m.thepaper.cn'];
  
-  async crawlArticle(page: Page: url: string): Promise<[Article, boolean]> {
+  async crawlArticle(page: Page, url: string): Promise<[Article, boolean]> {
     const Url = new URL(url);
     Url.hostname = 'www.thepaper.cn';
     const crawler = await getCrawlerWithDomain('www.thepaper.cn');
@@ -29,10 +29,6 @@ export class ThepaperCnCrawler extends Crawler {
   site = thepaperCn;
   domains = ['www.thepaper.cn'];
 
-  public async init(): Promise<Crawler> {
-    return super.init(2);
-  }
-
   async crawlArticle(page: Page, url: string): Promise<[Article, boolean]> {
     url = removeURLQuery(url);
 
@@ -41,7 +37,7 @@ export class ThepaperCnCrawler extends Crawler {
 
     try {
       await page.goto(url, { waitUntil: 'networkidle2' });
-      
+
       article.url = url;
       article.html = await page.content();
       article.source = null; // all thepaper.cn articles are original
