@@ -10,7 +10,7 @@ export abstract class Crawler {
   abstract site: SiteObj;
   public domains: string[];
   public puppeteerPool: Pool<Page>;
-  public useProxy: boolean = false;
+  public useProxy = false;
   public proxyOptions: ProxyOptions = {};
 
   public async init(maxSitePageCount?: number): Promise<Crawler> {
@@ -37,6 +37,8 @@ export abstract class Crawler {
 
   // return [article, crawledSuccessfully]
   abstract crawlArticle(page: Page, url: string): Promise<[Article, boolean]>;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async getArticleList(page: Page): Promise<string[]> {
     return [];
   };

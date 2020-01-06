@@ -6,9 +6,9 @@ export interface PriorityQueueOptions<inputType> {
 class Node<valueType, inputType> {
   value: valueType;
   next: Node<valueType, inputType> = null;
-  priority: number = 1;
+  priority = 1;
   validate: ((input?: inputType) => boolean) = () => true;
-  
+
   constructor(value: valueType, options: PriorityQueueOptions<inputType> = {}) {
     this.value = value;
     if (typeof options.priority !== 'undefined') {
@@ -23,7 +23,7 @@ class Node<valueType, inputType> {
 export class PriorityQueue<valueType, inputType> {
   first: Node<valueType, inputType> = null;
   last: Node<valueType, inputType> = null;
-  length: number = 0;
+  length = 0;
 
   push(value: valueType, options: PriorityQueueOptions<inputType> = {}): void {
     const node = new Node<valueType, inputType>(value, options);
@@ -37,7 +37,7 @@ export class PriorityQueue<valueType, inputType> {
     } else if (node.priority > this.first.priority) {
       node.next = this.first;
       this.first = node;
-    } else { 
+    } else {
       let previous = this.first;
       while (previous.next !== null && previous.next.priority >= node.priority) {
         previous = previous.next;

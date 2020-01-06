@@ -3,11 +3,12 @@ import { Article } from '@Models';
 
 async function checkArticle(
   article: ArticleObj,
-  dontCreateNewArticle: boolean = false): Promise<[Article, boolean]> {
-  let a, created;
+  dontCreateNewArticle = false): Promise<[Article, boolean]> {
+  let a;
+  let created;
   if (dontCreateNewArticle) {
     created = false;
-    a = await Article.findOne({ where: { url: article.url }});
+    a = await Article.findOne({ where: { url: article.url } });
   } else {
     [a, created] = await Article.findOrCreate({
       where: { url: article.url },

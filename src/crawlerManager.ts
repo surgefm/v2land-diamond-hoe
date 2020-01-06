@@ -14,7 +14,8 @@ export async function crawlPage(url: string): Promise<Article> {
     throw new Error('Crawler for this URL cannot be found.');
   }
 
-  let urlPage: Page, proxy: Proxy;
+  let urlPage: Page;
+  let proxy: Proxy;
   if (crawler.useProxy) {
     [urlPage, proxy] = await Promise.all([
       crawler.puppeteerPool.acquire(),

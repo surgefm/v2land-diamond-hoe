@@ -18,8 +18,7 @@ export class ProxyListPlusProxyCrawler extends ProxyCrawler {
       for (const type of Object.values(PLPProxyTypes)) {
         proxies = proxies.concat(await this.crawlProxiesOfType(page, type, 1));
       }
-    } catch (err) {}
-    finally {
+    } catch (err) {} finally {
       await global.puppeteerPool.destroy(page);
     }
 
