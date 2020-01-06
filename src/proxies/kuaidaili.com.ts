@@ -20,8 +20,7 @@ export class KuaidailiProxyCrawler extends ProxyCrawler {
           proxies.push(new Proxy(ip, port, ProxyType.HTTP, ProxyRegion.mainlandChina));
         });
       }
-    } catch (err) {}
-    finally {
+    } catch (err) {} finally {
       await global.puppeteerPool.destroy(page);
     }
 

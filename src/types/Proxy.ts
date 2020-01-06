@@ -27,7 +27,7 @@ export class Proxy {
   inUse: boolean;
   lastUse: Date;
   href: string;
-  
+
   private toStringReturn: string;
   private toStringReturnWithType: string;
 
@@ -55,7 +55,7 @@ export class Proxy {
   }
 
   public getProxyAgent(): any {
-    switch(this.type) {
+    switch (this.type) {
     case ProxyType.HTTP:
       return new HttpProxyAgent(this.href);
     case ProxyType.HTTPS:
@@ -91,7 +91,7 @@ export class Proxy {
     return this.latency;
   }
 
-  public toString(withType?: boolean) {
+  public toString(withType?: boolean): string {
     return withType ? this.toStringReturnWithType : this.toStringReturn;
   }
 }

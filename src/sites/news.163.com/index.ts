@@ -1,4 +1,4 @@
-import { SiteObj, Crawler, ProxyType } from '@Types';
+import { SiteObj, Crawler } from '@Types';
 import { Article } from '@Models';
 import { checkArticleWithURL, safe } from '@Utils';
 import { Page, ElementHandle } from 'puppeteer';

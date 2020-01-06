@@ -2,9 +2,10 @@ import { Page } from 'puppeteer';
 import { Proxy } from '@Types';
 const puppeteerPageProxy = require('puppeteer-page-proxy');
 
-async function useProxy(page: Page, proxy: Proxy) {
+async function useProxy(page: Page, proxy: Proxy): Promise<Page> {
   if (!proxy) return;
-  return puppeteerPageProxy(page, proxy.href);
+  await puppeteerPageProxy(page, proxy.href);
+  return page;
 }
 
 export default useProxy;

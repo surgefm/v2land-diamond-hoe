@@ -6,7 +6,7 @@ import { Article } from '@Models';
 async function checkArticleWithURL(
   site: SiteObj,
   url: string,
-  dontCreateNewArticle: boolean = false): Promise<[Article, boolean]> {
+  dontCreateNewArticle = false): Promise<[Article, boolean]> {
   let articleObj: ArticleObj = {
     site: await findOrCreateSite(site),
     url,
