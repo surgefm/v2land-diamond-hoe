@@ -3,13 +3,16 @@ import { SiteObj, ArticleObj } from '@Types';
 import findOrCreateSite from './findOrCreateSite';
 import { Article } from '@Models';
 
-async function checkArticleWithURL(site: SiteObj, url: string): Promise<[Article, boolean]> {
+async function checkArticleWithURL(
+  site: SiteObj,
+  url: string,
+  dontCreateNewArticle: boolean = false): Promise<[Article, boolean]> {
   let articleObj: ArticleObj = {
     site: await findOrCreateSite(site),
     url,
   };
 
-  return checkArticle(articleObj);
+  return checkArticle(articleObj, dontCreateNewArticle);
 }
 
 export default checkArticleWithURL;
