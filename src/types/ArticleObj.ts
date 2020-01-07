@@ -6,6 +6,8 @@ interface ArticleObj {
   title?: string;
   content?: string;
   abstract?: string;
+  source?: string;
+  sourceUrl?: string;
   time?: Date;
   html?: string;
   screenshot?: string;
