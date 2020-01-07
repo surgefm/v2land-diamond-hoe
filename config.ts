@@ -16,6 +16,9 @@ export const dbConfig = {
   host: process.env.DB_HOST || '127.0.0.1',
   username: process.env.DB_USERNAME || 'v2land',
   password: process.env.DB_PASSWORD,
+  logging: process.env.NODE_ENV === 'PRODUCTION'
+    ? false
+    : process.env.DB_LOGGING !== '0',
 };
 
 export const s3Config = {
