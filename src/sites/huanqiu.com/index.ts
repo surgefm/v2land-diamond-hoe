@@ -1,9 +1,8 @@
 import { SiteObj, Crawler } from '@Types';
 import { Article } from '@Models';
-import { checkArticleWithURL, safe } from '@Utils';
+import { checkArticleWithURL, safe, removeURLQuery } from '@Utils';
 import { Page } from 'puppeteer';
 import * as _ from 'lodash';
-import { removeURLQuery } from '@Utils';
 
 export const huanqiuCom: SiteObj = {
   name: '环球网',
@@ -88,6 +87,7 @@ export class HuanqiuComCrawler extends Crawler {
         els => els.map(el => el.textContent.trim()).filter(el => el.length > 0).join('\n'),
       );
       article.source = await safe(page.$eval('.metadata-info .source span', el => el.textContent.trim()));
+      article.sourceUrl = await safe(page.$eval('.metadata-info .source span a', el => el.getAttribute('href')));
       const timeStr = await page.$eval('.metadata-info .time', el => el.textContent.trim());
       article.time = new Date(timeStr + ' GMT+8');
 

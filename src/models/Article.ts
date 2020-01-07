@@ -21,6 +21,9 @@ class Article extends Model<Article> {
   @Column(DataType.TEXT)
   source?: string;
 
+  @Column(DataType.TEXT)
+  sourceUrl?: string;
+
   @Column
   time?: Date;
 
@@ -36,7 +39,7 @@ class Article extends Model<Article> {
 
   @ForeignKey(() => Site)
   @Column
-  siteId: number
+  siteId: number;
 }
 
 export default Article;
