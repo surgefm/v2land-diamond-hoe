@@ -1,5 +1,13 @@
-import { Table, Column, Model, HasMany, DataType } from 'sequelize-typescript';
 import Article from './Article';
+import {
+  Table,
+  Column,
+  Model,
+  HasMany,
+  DataType,
+  BeforeUpdate,
+  BeforeCreate,
+} from 'sequelize-typescript';
 
 @Table({
   tableName: 'sites',
@@ -14,6 +22,14 @@ class Site extends Model<Site> {
 
   @HasMany(() => Article)
   articles: Article[];
+
+  @BeforeUpdate
+  @BeforeCreate
+  static trimText(site: Site): void {
+    if (site.name) {
+      site.name = site.name.trim();
+    }
+  }
 }
 
 export default Site;
