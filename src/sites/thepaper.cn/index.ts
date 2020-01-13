@@ -1,8 +1,7 @@
 import { SiteObj, Crawler } from '@Types';
 import { Article } from '@Models';
-import { checkArticleWithURL, safe, removeURLQuery, getCrawlerWithDomain } from '@Utils';
-import { Page, ElementHandle } from 'puppeteer';
-import delay from 'delay';
+import { checkArticleWithURL, removeURLQuery, getCrawlerWithDomain } from '@Utils';
+import { Page } from 'puppeteer';
 import * as _ from 'lodash';
 
 export const thepaperCn: SiteObj = {
@@ -16,7 +15,7 @@ export const thepaperCn: SiteObj = {
 export class MThepaperCnCrawler extends Crawler {
   site = thepaperCn;
   domains = ['m.thepaper.cn'];
- 
+
   async crawlArticle(page: Page, url: string): Promise<[Article, boolean]> {
     const Url = new URL(url);
     Url.hostname = 'www.thepaper.cn';
@@ -42,7 +41,7 @@ export class ThepaperCnCrawler extends Crawler {
       article.html = await page.content();
       article.source = null; // all thepaper.cn articles are original
 
-      function extractTime(text: String): Date {
+      function extractTime(text: string): Date {
         let regExp = /\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}/;
         let index = text.search(regExp);
         if (index > 0) {
@@ -50,7 +49,7 @@ export class ThepaperCnCrawler extends Crawler {
           return new Date(timeString + ' GMT+8');
         } else {
           return null;
-        }   
+        }
       }
 
       // for video news
@@ -64,7 +63,7 @@ export class ThepaperCnCrawler extends Crawler {
       } else {
         article.title = await page.$eval('.newscontent .news_title', el => el.textContent.trim());
         article.content = await page.$eval(
-          '.newscontent .news_txt', 
+          '.newscontent .news_txt',
           el => Array.from(el.childNodes).map(x=>x.textContent.trim()).filter(t => t.length !== 0).join('\n'),
         );
         article.abstract = article.content.substring(0, 200); // thepaper.cn has no abstract; use content as abstract

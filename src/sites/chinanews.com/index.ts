@@ -72,6 +72,6 @@ export class MChinaNewsComCrawler extends Crawler {
     pathname = pathname.slice(pathname.length - 4);
 
     const crawler = await getCrawlerWithDomain('www.chinanews.com');
-    return crawler.crawlArticle(page, `http://www.chinanews.com/${pathname.join('/')}`)
+    return crawler.crawlArticle(page, `http://www.chinanews.com/${pathname.join('/')}`);
   }
 }
