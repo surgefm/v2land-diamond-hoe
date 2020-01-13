@@ -1,6 +1,6 @@
 import { SiteObj, Crawler } from '@Types';
 import { Article } from '@Models';
-import { checkArticleWithURL, safe } from '@Utils';
+import { checkArticleWithURL } from '@Utils';
 import { Page } from 'puppeteer';
 import * as _ from 'lodash';
 
@@ -40,10 +40,10 @@ export class QdailyComCrawler extends Crawler {
     const pageLimit = 5;
     const sectionCodes = [42, 1, 2, 35, 22, 4, 21, 41];
 
-    var urlPaths: string[] = [];
-    for(let sectionCode of sectionCodes) {
-      for(let pageNumber = 1; pageNumber <= pageLimit; ++pageNumber) {
-        let pageUrl = `https://www.jfdaily.com/news/list?section=${sectionCode}&page=${pageNumber}`; 
+    let urlPaths: string[] = [];
+    for (let sectionCode of sectionCodes) {
+      for (let pageNumber = 1; pageNumber <= pageLimit; ++pageNumber) {
+        let pageUrl = `https://www.jfdaily.com/news/list?section=${sectionCode}&page=${pageNumber}`;
         await page.goto(pageUrl, { waitUntil: 'networkidle2' });
 
         urlPaths = urlPaths.concat(
@@ -52,7 +52,6 @@ export class QdailyComCrawler extends Crawler {
       }
     }
 
-    return urlPaths.map(path => 'https://www.jfdaily.com' + path);
+    return _.uniq(urlPaths.map(path => 'https://www.jfdaily.com' + path));
   }
-
 }
